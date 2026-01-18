@@ -7,7 +7,7 @@ import { ContractStats, UserInfo, ContractConfig, LinkStats, GasRewardStats, Tri
 import { NavTab, AddressBox, Notification, ResultModal, WalletButton } from './components/Shared';
 import { LuckyLogo } from './components/Logo';
 import { MetaMaskIcon, OKXIcon, BinanceIcon, TrustWalletIcon, TokenPocketIcon, GenericWalletIcon } from './components/WalletIcons';
-import { CONTRACT_ADDRESS, BSC_RPC, CHAIN_ID, PAGE_SIZE, STORAGE_KEY, HISTORY_BLOCK_RANGE } from './constants';
+import { CONTRACT_ADDRESS, BSC_RPC, CHAIN_ID, PAGE_SIZE, STORAGE_KEY } from './constants';
 import { parseRpcError } from './utils';
 import { useLanguage } from './contexts/LanguageContext';
 
