@@ -1,0 +1,150 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#050507">
+    <meta name="description" content="幸运锦鲤 (Lucky Koi) - 去中心化持币即抽奖协议。无需购票，持有代币即可永久参与。基于 Chainlink VRF 真随机，公平公正。">
+    <meta property="og:title" content="幸运锦鲤 (Lucky Koi) - 去中心化持币即抽奖协议">
+    <meta property="og:description" content="持仓即入池，自动获取开奖资格。基于 Chainlink VRF 真随机，公平不可篡改。">
+    <meta property="og:type" content="website">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg width='120' height='120' viewBox='0 0 120 120' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3ClinearGradient id='b' x1='0.5' y1='0' x2='0.5' y2='1'%3E%3Cstop offset='0' stop-color='%23EF4444'/%3E%3Cstop offset='1' stop-color='%23F59E0B'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M60 15C32 30 28 75 60 95C92 75 88 30 60 15Z' fill='url(%23b)'/%3E%3Cpath d='M48 22C35 20 25 28 28 15' stroke='%23F59E0B' stroke-width='2' fill='none'/%3E%3Cpath d='M72 22C85 20 95 28 92 15' stroke='%23F59E0B' stroke-width='2' fill='none'/%3E%3Ccircle cx='48' cy='35' r='3' fill='white'/%3E%3Ccircle cx='72' cy='35' r='3' fill='white'/%3E%3C/svg%3E">
+    <title>幸运锦鲤 (Lucky Koi) - 去中心化持币即抽奖协议</title>
+    
+    <!-- Preload Wallet Icons -->
+    <link rel="preload" as="image" href="https://upload.wikimedia.org/wikipedia/commons/3/36/MetaMask_Fox.svg">
+    <link rel="preload" as="image" href="https://s2.coinmarketcap.com/static/img/exchanges/64x64/294.png">
+    <link rel="preload" as="image" href="https://s2.coinmarketcap.com/static/img/coins/64x64/1839.png">
+    <link rel="preload" as="image" href="https://s2.coinmarketcap.com/static/img/coins/64x64/5964.png">
+    <link rel="preload" as="image" href="https://tp-statics.tokenpocket.pro/logo/tokenpocket.png">
+    <link rel="preload" as="image" href="https://cdn-icons-png.flaticon.com/512/60/60484.png">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #EF4444; /* Red 500 */
+            --secondary: #F59E0B; /* Amber 500 */
+            --bg-deep: #050507;
+        }
+        body {
+            font-family: 'Plus Jakarta Sans', 'Noto Sans SC', sans-serif;
+            background-color: var(--bg-deep);
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(239, 68, 68, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(245, 158, 11, 0.05) 0%, transparent 40%);
+            color: #fafafa;
+            min-height: 100vh;
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .glass-card {
+            background: rgba(20, 18, 15, 0.6);
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.7);
+        }
+        /* 红金渐变文字 */
+        .accent-gradient {
+            background: linear-gradient(135deg, #FCD34D 0%, #F59E0B 40%, #EF4444 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* 锦鲤主题按钮 */
+        .action-button {
+            background: linear-gradient(135deg, #EF4444 0%, #D97706 100%);
+            color: white;
+            font-weight: 800;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 25px -5px rgba(239, 68, 68, 0.3);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .action-button:hover:not(:disabled) {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 20px 35px -5px rgba(245, 158, 11, 0.4);
+            filter: brightness(1.1);
+        }
+        
+        .flip-container {
+            perspective: 1000px;
+        }
+        .flip-card {
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-style: preserve-3d;
+            position: relative;
+        }
+        .flip-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .flip-card-front, .flip-card-back {
+            backface-visibility: hidden;
+            width: 100%;
+            height: 100%;
+        }
+        .flip-card-back {
+            transform: rotateY(180deg);
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        .stat-glow {
+            text-shadow: 0 0 25px rgba(245, 158, 11, 0.5);
+        }
+        @keyframes spin-slow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .animate-spin-slow {
+            animation: spin-slow 8s linear infinite;
+        }
+        /* 自定义波动动画 */
+        @keyframes wave {
+            0% { transform: translateY(0) scaleY(1); }
+            50% { transform: translateY(-5px) scaleY(1.1); }
+            100% { transform: translateY(0) scaleY(1); }
+        }
+        /* 自定义滚动条 */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0a0a0c; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #333; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555; 
+        }
+        /* 隐藏滚动条但保留功能 */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<script type="importmap">
+{
+  "imports": {
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "react": "https://esm.sh/react@^19.2.3",
+    "lucide-react": "https://esm.sh/lucide-react@^0.562.0",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "ethers": "https://esm.sh/ethers@6.13.2"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+<body>
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+</body>
+</html>
